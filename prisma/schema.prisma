@@ -1,0 +1,49 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Company {
+  id         Int       @id @default(autoincrement())
+  name       String
+  email      String    @unique
+  services   Service[]
+  offers     Offer[]   // relação inversa
+  createdAt  DateTime  @default(now())
+}
+
+model Service {
+  id            Int             @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Float
+  discount      Float?
+  estimatedTime Int?
+  company       Company         @relation(fields: [companyId], references: [id])
+  companyId     Int
+  offerServices OfferService[]  // relação inversa
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+model Offer {
+  id        Int            @id @default(autoincrement())
+  title     String
+  details   String?
+  validUntil DateTime?
+  services  OfferService[]
+  company   Company        @relation(fields: [companyId], references: [id])
+  companyId Int
+  createdAt DateTime       @default(now())
+}
+
+model OfferService {
+  id        Int     @id @default(autoincrement())
+  offer     Offer   @relation(fields: [offerId], references: [id])
+  offerId   Int
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId Int
+}

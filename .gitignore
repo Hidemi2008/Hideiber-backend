@@ -1,0 +1,10 @@
+# .gitignore
+
+node_modules/
+dist/
+.env          # ← NÃO commitar!
+.env.local
+.env.*.local
+
+# Mas manter um exemplo:
+# .env.example   # ← Isso sim pode ser commitado
