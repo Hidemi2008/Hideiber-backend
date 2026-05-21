@@ -1,0 +1,50 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String
+  email     String    @unique
+  services  Service[]
+  offers    Offer[]
+  createdAt DateTime  @default(now())
+}
+
+model Service {
+  id            String         @id @default(uuid())
+  name          String
+  description   String?
+  price         Float
+  discount      Float?
+  estimatedTime Int?
+  user          User           @relation(fields: [userId], references: [id])
+  userId        String
+  offerServices OfferService[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model Offer {
+  id         String         @id @default(uuid())
+  title      String
+  details    String?
+  validUntil DateTime?
+  services   OfferService[]
+  user       User           @relation(fields: [userId], references: [id])
+  userId     String
+  createdAt  DateTime       @default(now())
+}
+
+model OfferService {
+  id        String  @id @default(uuid())
+  offer     Offer   @relation(fields: [offerId], references: [id])
+  offerId   String
+  service   Service @relation(fields: [serviceId], references: [id])
+  serviceId String
+}
