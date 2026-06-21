@@ -104,3 +104,15 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Plan {
+  id        String   @id @default(uuid())
+  name      String
+  price     Float
+  maxLinks  Int
+  maxClicks Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("plan")
+}
