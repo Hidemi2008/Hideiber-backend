@@ -18,6 +18,11 @@ export const auth = betterAuth({
   // Configurações de segurança
   secret: process.env.BETTER_AUTH_SECRET,
 
+  // Origens confiáveis a partir das quais o Better Auth aceita requisições.
+  // Sem isso, ele rejeita qualquer chamada vinda do frontend com
+  // "Invalid origin", mesmo que o CORS do Express já tenha liberado.
+  trustedOrigins: ["http://localhost:3000"],
+
   // Configurações de sessão
   session: {
     expiresIn: 60 * 60 * 24 * 7, // 7 dias
