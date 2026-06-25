@@ -3,7 +3,7 @@ import { prisma } from "../lib/prisma.js";
 
 export async function listarServicos(userId) {
   return prisma.service.findMany({
-    where: { userId },
+    where: userId ? { userId } : undefined, // sem userId = lista todos
     orderBy: { createdAt: "desc" },
   });
 }

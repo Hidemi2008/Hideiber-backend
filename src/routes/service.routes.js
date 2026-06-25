@@ -5,14 +5,13 @@ import { requireAuth } from "../middleware/auth.js";
 
 const router = Router();
 
-// Todas as rotas de serviços exigem login,
-// pois um serviço sempre pertence a um usuário
-router.use(requireAuth);
-
+// Leitura pública — qualquer visitante pode ver os serviços
 router.get("/", ServiceController.listar);
 router.get("/:id", ServiceController.buscar);
-router.post("/", ServiceController.criar);
-router.put("/:id", ServiceController.atualizar);
-router.delete("/:id", ServiceController.deletar);
+
+// Escrita protegida — apenas usuários autenticados
+router.post("/", requireAuth, ServiceController.criar);
+router.put("/:id", requireAuth, ServiceController.atualizar);
+router.delete("/:id", requireAuth, ServiceController.deletar);
 
 export default router;

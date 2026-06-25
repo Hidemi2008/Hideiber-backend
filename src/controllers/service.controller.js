@@ -4,7 +4,9 @@ import * as ServiceModel from "../models/service.model.js";
 // GET /api/services
 export async function listar(req, res) {
   try {
-    const servicos = await ServiceModel.listarServicos(req.user.id);
+    // Se autenticado, lista só os serviços do usuário.
+    // Se público (sem sessão), lista todos.
+    const servicos = await ServiceModel.listarServicos(req.user?.id ?? null);
     return res.json(servicos);
   } catch (err) {
     console.error("Erro ao listar serviços:", err);
@@ -21,8 +23,7 @@ export async function buscar(req, res) {
       return res.status(404).json({ error: "Serviço não encontrado." });
     }
 
-    // Garante que o serviço pertence ao usuário autenticado
-    if (servico.userId !== req.user.id) {
+    if (req.user && servico.userId !== req.user.id) {
       return res.status(403).json({ error: "Acesso negado." });
     }
 
@@ -48,7 +49,7 @@ export async function criar(req, res) {
       price,
       discount,
       estimatedTime,
-      userId: req.user.id, // vincula ao usuário logado
+      userId: req.user.id,
     });
 
     return res.status(201).json(servico);
