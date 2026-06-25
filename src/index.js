@@ -6,6 +6,7 @@ import { auth } from "./lib/auth.js";
 import { toNodeHandler } from "better-auth/node";
 import { requireAuth } from "./middleware/auth.js";
 import planRoutes from "./routes/plan.routes.js";
+import serviceRoutes from "./routes/service.routes.js";
 
 dotenv.config();
 
@@ -45,6 +46,8 @@ app.get("/api/me", requireAuth, (req, res) => {
 });
 
 app.use("/api/plans", planRoutes);
+
+app.use("/api/services", serviceRoutes);
 
 // Iniciar servidor
 app.listen(PORT, () => {
